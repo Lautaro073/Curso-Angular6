@@ -11,7 +11,10 @@ import { ListaDestinoComponent } from './lista-destino/lista-destino.component';
 import { DestinoDetalleComponent } from './destino-detalle/destino-detalle.component';
 import { FormDestinoViajeComponent } from './form-destino-viaje/form-destino-viaje.component';
 import { DestinosApiClient } from './models/destinos-api-client.model';
-
+import { DestinosViajesEffects, DestinosViajesState, intializeDestinosViajesState, reducerDestinosViajes } from './models/destinos-viajes-state.model';
+import { ActionReducer } from '@ngrx/store';
+import { StoreModule as NgrxStoreModule, ActionReducerMap } from '@ngrx/store'
+import { EffectsModule } from '@ngrx/effects';
 // definiendo direcciones del nav
 
 const routes: Routes = [
@@ -20,7 +23,20 @@ const routes: Routes = [
   { path: 'destino', component: DestinoDetalleComponent},
 ];
 
+// redux init
+export interface AppState{
+  destinos : DestinosViajesState;
+} 
 
+const reducers: ActionReducerMap<AppState> = {
+  destinos: reducerDestinosViajes
+};
+
+const reducersInitialState = {
+  destinos: intializeDestinosViajesState()
+}
+
+// redux fin init
 
 @NgModule({
   declarations: [
@@ -28,13 +44,17 @@ const routes: Routes = [
     DestinoViajeComponent,
     ListaDestinoComponent,
     DestinoDetalleComponent,
-    FormDestinoViajeComponent
+    FormDestinoViajeComponent,
+    
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes), //registrando las rutas
     FormsModule, //agregar un formulario
     ReactiveFormsModule,
+    NgrxStoreModule.forRoot(reducers, { initialState: reducersInitialState }),
+
+    EffectsModule.forRoot([DestinosViajesEffects])
   ],
   providers: [
     DestinosApiClient
