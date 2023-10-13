@@ -11,6 +11,9 @@
       placeholder="Ingresar nombre..."
       [formControl]="convertToFormControl(fg.controls['nombre'])"
     />
+    <ul>
+        <li *ngFor="let r of searchResults">{{r}}</li>
+    </ul>
     <div *ngIf="fg.controls['nombre'].hasError('required')">Nombre requerido!</div>
     <div *ngIf="fg.controls['nombre'].hasError('invalidNombre')">nombre invalido!</div>
     <div *ngIf="fg.controls['nombre'].hasError('minLongNombre')">nombre debe tener al menos {{minLongitud}} de largo!</div>
